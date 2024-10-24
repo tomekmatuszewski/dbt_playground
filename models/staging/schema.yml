@@ -1,0 +1,26 @@
+version: 2
+
+sources:
+  - name: superstore_primary
+    database: hd_final_project  
+    schema: dbo_source  
+    tables:
+      - name: superstore_primary
+        columns:
+          - name: Row_ID
+            description: Primary key of the orders table
+            tests:
+              - unique
+              - not_null
+
+models:
+  - name: superstore
+    description: "SuperStore staging table"
+    config:
+      schema: staging
+    columns:
+      - name: Row_ID
+        description: "The primary key for this table"
+        data_tests:
+          - unique
+          - not_null   

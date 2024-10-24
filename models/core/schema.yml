@@ -1,0 +1,60 @@
+version: 2
+
+models:
+  - name: sales_fact
+    description: "Sales fact table"
+    config:
+      schema: core
+    columns:
+      - name: Row_ID
+        description: "The primary key for this table"
+        data_tests:
+          - unique
+          - not_null
+  - name: product_dim
+    description: "Custom Dimension Product table - full refresh"
+    config:
+      schema: core
+    columns:
+      - name: Product_ID
+        description: "Natural key for this table"
+        data_tests:
+          - not_null
+      - name: Product_SK
+        description: "Surrogate Key key for this table"
+        data_tests:
+          - not_null
+  - name: customer_dim
+    description: "Custom Dimension Customer table - full refresh"
+    config:
+      schema: core
+    columns:
+      - name: Customer_ID
+        description: "Natural key for this table"
+        data_tests:
+          - not_null
+      - name: Customer_SK
+        description: "Surrogate Key key for this table"
+        data_tests:
+          - not_null
+  - name: shipmode_dim
+    description: "ShimMode Dimension table"
+    config:
+      schema: core
+    columns:
+      - name: ShipMode_SK
+        description: "Surrogate Key key for this table"
+        data_tests:
+          - not_null
+  - name: date_dim
+    description: "Date Dimension table - Calendar table"
+    config:
+      schema: core
+    columns:
+      - name: Date_SK
+        description: "Surrogate Key key for this table"
+        data_tests:
+          - not_null
+  
+
+
