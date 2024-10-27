@@ -1,5 +1,10 @@
 {{
-    config(materialized='table')
+    config(
+        materialized='table',
+        on_schema_change='append_new_columns',
+        as_columnstore=false,
+        post_hook="ALTER TABLE {{ this }} REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = PAGE);"
+    )
 }}
 
 with cte as (
@@ -8,7 +13,7 @@ with cte as (
     FROM {{ ref('superstore') }}
 )
 SELECT 
-      {{ dbt_utils.generate_surrogate_key(['Ship_Mode']) }} as ShipMode_SK
+      ROW_NUMBER() OVER (ORDER BY (SELECT NULL))  as ShipMode_SK
       ,Ship_Mode
 FROM cte
 

@@ -5,56 +5,208 @@ models:
     description: "Sales fact table"
     config:
       schema: core
+      contract:
+        enforced: true
     columns:
-      - name: Row_ID
-        description: "The primary key for this table"
+      - name: Sales_SK
+        data_type: varchar(50)
+        constraints:
+          - type: primary_key
         data_tests:
           - unique
           - not_null
+      - name: Row_ID
+        data_type: int
+        constraints:
+          - type: not_null
+          - type: unique
+        data_tests:
+          - unique
+          - not_null
+      - name: Order_ID
+        data_type: varchar(16)
+        constraints:
+          - type: not_null
+        data_tests:
+          - not_null
+      - name: Date_Order_SK
+        data_type: int
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            to: ref('date_dim')
+            to_columns: [Date_SK]
+        data_tests:
+          - not_null
+      - name: Date_ShipMode_SK
+        data_type: int
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            to: ref('date_dim')
+            to_columns: [Date_SK]
+        data_tests:
+          - not_null
+      - name: ShipMode_SK
+        data_type: int
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            to: ref('shipmode_dim')
+            to_columns: [ShipMode_SK]
+        data_tests:
+          - not_null
+      - name: Customer_SK
+        data_type: int
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            to: ref('customer_dim')
+            to_columns: [Customer_SK]
+        data_tests:
+          - not_null
+      - name: Product_SK
+        data_type: int
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            to: ref('product_dim')
+            to_columns: [Product_SK]
+        data_tests:
+          - not_null
+      - name: Sales
+        data_type: float
+      - name: Quantity
+        data_type: int
+      - name: Discount
+        data_type: float
+      - name: Profit
+        data_type: float
+
   - name: product_dim
     description: "Custom Dimension Product table - full refresh"
     config:
       schema: core
+      contract:
+        enforced: true
     columns:
       - name: Product_ID
+        data_type: varchar(16)
         description: "Natural key for this table"
+        constraints:
+          - type: not_null
         data_tests:
           - not_null
       - name: Product_SK
+        data_type: int 
         description: "Surrogate Key key for this table"
+        constraints:
+          - type: primary_key
+          - type: not_null
         data_tests:
           - not_null
+      - name: Product_Name
+        data_type: varchar(150)
+      - name: Category
+        data_type: varchar(16)
+      - name: Sub_Category
+        data_type: varchar(16)
+      - name: valid_from
+        data_type: datetime
+      - name: valid_to
+        data_type: datetime
+      - name: is_active
+        data_type: int
+      
   - name: customer_dim
     description: "Custom Dimension Customer table - full refresh"
     config:
       schema: core
+      contract: {enforced: true}
+      meta:
+        surrogate_key: true
     columns:
       - name: Customer_ID
+        data_type: varchar(16)
         description: "Natural key for this table"
+        constraints:
+          - type: not_null
         data_tests:
           - not_null
       - name: Customer_SK
+        data_type: int
         description: "Surrogate Key key for this table"
+        constraints:
+          - type: not_null
         data_tests:
           - not_null
+      - name: Customer_Name
+        data_type: varchar(25)
+      - name: Segment
+        data_type: varchar(20)
+      - name: Country
+        data_type: varchar(20)
+      - name: City
+        data_type: varchar(20)
+      - name: State
+        data_type: varchar(20)
+      - name: Postal_Code
+        data_type: int
+      - name: Region
+        data_type: varchar(20)
+      - name: valid_from
+        data_type: datetime
+      - name: valid_to
+        data_type: datetime
+      - name: is_active
+        data_type: int
+        
   - name: shipmode_dim
     description: "ShimMode Dimension table"
     config:
       schema: core
+      contract:
+        enforced: true
     columns:
       - name: ShipMode_SK
+        data_type: int
         description: "Surrogate Key key for this table"
+        constraints:
+          - type: primary_key
         data_tests:
           - not_null
+      - name: Ship_Mode
+        data_type: varchar(20)
+        data_tests:
+          - not_null
+          - unique
+
   - name: date_dim
     description: "Date Dimension table - Calendar table"
     config:
       schema: core
+      contract:
+        enforced: true
     columns:
       - name: Date_SK
+        data_type: int
         description: "Surrogate Key key for this table"
         data_tests:
           - not_null
+      - name: date_day
+        data_type: nvarchar(4000)
+      - name: Year
+        data_type: int
+      - name: Month
+        data_type: int
+      - name: DayOfMonth
+        data_type: int
+      - name: MonthName
+        data_type: nvarchar(30)
+      - name: DayOfWeek
+        data_type: nvarchar(30)
+        
+  
   
 
 

@@ -1,7 +1,8 @@
 {{
     config(
         materialized='incremental', 
-        unique_key="Row_ID"
+        unique_key="Row_ID",
+        on_schema_change='append_new_columns'
       )
 }}
 

@@ -1,6 +1,9 @@
 {{
     config(
-        materialized = "table"
+        materialized = "table",
+        on_schema_change='append_new_columns',
+        as_columnstore=false,
+        post_hook="ALTER TABLE {{ this }} REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = PAGE);"
     )
 }}
 
@@ -60,7 +63,7 @@ final_date as (
     FROM FilteredDates
 )
 SELECT
-    {{ dbt_utils.generate_surrogate_key(['date_day']) }} as Date_SK
+    ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) as Date_SK
     ,date_day as date_day
     ,YEAR(date_day) as Year
     ,MONTH(date_day) as Month

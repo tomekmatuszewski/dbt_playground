@@ -4,3 +4,25 @@ seeds:
   - name: superstore_primary
     config:
       schema: source
+      column_types:
+        Row_ID: int
+        Order_ID: varchar(16)
+        Order_Date: varchar(16)
+        Ship_Date: varchar(16)
+        Ship_Mode: varchar(16)
+        Customer_ID: varchar(16)
+        Customer_Name: varchar(25)
+        Segment: varchar(20)
+        Country: varchar(20)
+        City: varchar(20)
+        State: varchar(20)
+        Postal_Code: int
+        Region: varchar(20)
+        Product_ID: varchar(16)
+        Product_Name: varchar(150)
+        Category: varchar(16)
+        Sub_Category: varchar(16)
+        Sales: float
+        Quantity: int
+        Discount: float
+        Profit: float

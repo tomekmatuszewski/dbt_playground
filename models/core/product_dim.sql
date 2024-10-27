@@ -1,5 +1,13 @@
 {{
-    config(materialized='table')
+    config(
+        materialized='table',
+        on_schema_change='append_new_columns',
+        as_columnstore=false,
+        post_hook=[
+            "ALTER TABLE {{ this }} REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = PAGE);",
+            "ALTER TABLE {{ this }} ADD CONSTRAINT Product_PK PRIMARY KEY (Product_SK);"
+        ]
+    )
 }}
 
 with cte as (
@@ -25,24 +33,28 @@ consecutive_rows as (
 SELECT
     *,
     IIF(end_date is null, 1, 0) as is_current,
-     ROW_NUMBER() OVER (PARTITION BY Product_ID ORDER BY Start_Date) 
-               - ROW_NUMBER() OVER (PARTITION BY Product_ID, Product_Name ORDER BY Start_Date) AS grp
+     ROW_NUMBER() OVER (PARTITION BY Product_ID ORDER BY start_date) 
+               - ROW_NUMBER() OVER (PARTITION BY Product_ID, Product_Name  ORDER BY start_date) AS grp
 FROM cte_with_dates
 
-)
+),
+final as (
 SELECT
-    {{ dbt_utils.generate_surrogate_key(['Product_ID']) }} as Product_SK,
     Product_ID,
     Product_Name,
     Category,
     Sub_Category,
     MIN(start_date) AS valid_from,
     CASE 
-        WHEN MAX(is_current) = 1 THEN NULL
+        WHEN MAX(is_current) = 1 THEN CONVERT(datetime, '12/31/9999', 101) 
         ELSE MAX(end_date) END AS valid_to,
     MAX(is_current) AS is_active 
 FROM consecutive_rows
 GROUP BY Product_ID, Product_Name, Category, Sub_Category, grp
-
+)
+SELECT
+    ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) as Product_SK,
+    *
+FROM final where valid_from <> valid_to
 
 

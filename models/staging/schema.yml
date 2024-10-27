@@ -3,24 +3,76 @@ version: 2
 sources:
   - name: superstore_primary
     database: hd_final_project  
-    schema: dbo_source  
+    schema: dbo_source
     tables:
       - name: superstore_primary
-        columns:
-          - name: Row_ID
-            description: Primary key of the orders table
-            tests:
-              - unique
-              - not_null
 
 models:
   - name: superstore
     description: "SuperStore staging table"
     config:
+      contract:
+        enforced: true
       schema: staging
     columns:
       - name: Row_ID
+        data_type: int
         description: "The primary key for this table"
+        constraints:
+          - type: not_null
+          - type: primary_key
         data_tests:
           - unique
-          - not_null   
+          - not_null
+      - name: Order_ID
+        data_type: varchar(16)
+        constraints:
+          - type: not_null
+        data_tests:
+          - not_null
+      - name: Order_Date
+        data_type: varchar(16)
+      - name: Ship_Date
+        data_type: varchar(16)
+      - name: Ship_Mode
+        data_type: varchar(16)
+      - name: Ship_Mode
+        data_type: varchar(16)
+      - name: Customer_ID
+        data_type: varchar(16)
+        data_tests:
+          - not_null
+      - name: Customer_Name
+        data_type: varchar(25)
+      - name: Segment
+        data_type: varchar(20)
+      - name: Country
+        data_type: varchar(20)
+      - name: City
+        data_type: varchar(20)
+      - name: State
+        data_type: varchar(20)
+      - name: Postal_Code
+        data_type: int
+      - name: Region
+        data_type: varchar(20)
+      - name: Product_ID
+        data_type: varchar(16)
+        constraints:
+          - type: not_null
+        data_tests:
+          - not_null
+      - name: Product_Name
+        data_type: varchar(150)
+      - name: Category
+        data_type: varchar(16)
+      - name: Sub_Category
+        data_type: varchar(16)
+      - name: Sales
+        data_type: float
+      - name: Quantity
+        data_type: int
+      - name: Discount
+        data_type: float
+      - name: Profit
+        data_type: float
