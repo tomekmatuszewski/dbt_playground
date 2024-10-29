@@ -2,7 +2,7 @@
     config(
         materialized='incremental', 
         unique_key="Row_ID",
-        on_schema_change='append_new_columns'
+        on_schema_change='append_new_columns',
       )
 }}
 
@@ -29,4 +29,12 @@ LEFT JOIN {{ ref('product_dim') }} product ON source.Product_ID = product.Produc
 
 {% if is_incremental() %}
   WHERE Row_ID > (SELECT MAX(Row_ID) FROM {{ this }})
+
+{% else %}
+  
+  {{
+    config(
+        post_hook = "{{ create_pk('Sales_SK')}}"
+    )
+}}
 {% endif %}

@@ -12,6 +12,7 @@ models:
         data_type: varchar(50)
         constraints:
           - type: primary_key
+          - type: not_null
         data_tests:
           - unique
           - not_null
@@ -89,6 +90,11 @@ models:
       schema: core
       contract:
         enforced: true
+    constraints:
+      - type: primary_key
+        columns:
+          - [Product_SK]
+        name: PK_product_dim
     columns:
       - name: Product_ID
         data_type: varchar(16)
@@ -101,7 +107,6 @@ models:
         data_type: int 
         description: "Surrogate Key key for this table"
         constraints:
-          - type: primary_key
           - type: not_null
         data_tests:
           - not_null
@@ -168,11 +173,12 @@ models:
       contract:
         enforced: true
     columns:
-      - name: ShipMode_SK
+      - name: ShipMode_SK         
         data_type: int
         description: "Surrogate Key key for this table"
         constraints:
           - type: primary_key
+          - type: not_null
         data_tests:
           - not_null
       - name: Ship_Mode
@@ -190,6 +196,8 @@ models:
     columns:
       - name: Date_SK
         data_type: int
+        constraints:
+          - type: not_null
         description: "Surrogate Key key for this table"
         data_tests:
           - not_null

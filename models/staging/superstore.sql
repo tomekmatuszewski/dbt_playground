@@ -2,7 +2,8 @@
     config(
         materialized='incremental', 
         unique_key="Row_ID",
-        on_schema_change='append_new_columns'
+        on_schema_change='append_new_columns',
+        post_hook=[]
       )
 }}
 
@@ -32,6 +33,19 @@ from {{ source('superstore_primary', 'superstore_primary') }}
 
 {% if is_incremental() %}
 WHERE Row_ID > (SELECT MAX(Row_ID) FROM {{ this }})
+
+{% else %}
+
+{{
+    config(
+        materialized='incremental', 
+        unique_key="Row_ID",
+        on_schema_change='append_new_columns',
+        post_hook = [
+           "{{ create_pk('Row_ID') }}"
+        ]
+      )
+}}
+
 {% endif %}
 
--- post_hook="ALTER TABLE {{ this }} REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = PAGE);"

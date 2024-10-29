@@ -6,7 +6,7 @@
         contract={'enforced': true},
         post_hook=[
             "ALTER TABLE {{ this }} REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = PAGE);",
-            "ALTER TABLE {{ this }} ADD CONSTRAINT Customer_PK PRIMARY KEY (Customer_SK);"
+            "{{  create_pk('Customer_SK') }}"
         ],
     )
 }}

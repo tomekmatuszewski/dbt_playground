@@ -3,7 +3,10 @@
         materialized = "table",
         on_schema_change='append_new_columns',
         as_columnstore=false,
-        post_hook="ALTER TABLE {{ this }} REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = PAGE);"
+        post_hook=[
+            "ALTER TABLE {{ this }} REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = PAGE);",
+            "{{  create_pk('Date_SK') }}"
+        ]
     )
 }}
 

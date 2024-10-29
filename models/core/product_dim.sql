@@ -5,7 +5,7 @@
         as_columnstore=false,
         post_hook=[
             "ALTER TABLE {{ this }} REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = PAGE);",
-            "ALTER TABLE {{ this }} ADD CONSTRAINT Product_PK PRIMARY KEY (Product_SK);"
+            "{{ create_pk('Product_SK') }}"
         ]
     )
 }}
