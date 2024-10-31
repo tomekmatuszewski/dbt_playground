@@ -36,7 +36,7 @@ models:
           - type: not_null
           - type: foreign_key
             to: ref('date_dim')
-            to_columns: [Date_SK]
+            to_columns: Date_SK
         data_tests:
           - not_null
       - name: Date_ShipMode_SK
@@ -45,7 +45,7 @@ models:
           - type: not_null
           - type: foreign_key
             to: ref('date_dim')
-            to_columns: [Date_SK]
+            to_columns: Date_SK
         data_tests:
           - not_null
       - name: ShipMode_SK
@@ -54,7 +54,7 @@ models:
           - type: not_null
           - type: foreign_key
             to: ref('shipmode_dim')
-            to_columns: [ShipMode_SK]
+            to_columns: ShipMode_SK
         data_tests:
           - not_null
       - name: Customer_SK
@@ -63,7 +63,7 @@ models:
           - type: not_null
           - type: foreign_key
             to: ref('customer_dim')
-            to_columns: [Customer_SK]
+            to_columns: Customer_SK
         data_tests:
           - not_null
       - name: Product_SK
@@ -72,7 +72,7 @@ models:
           - type: not_null
           - type: foreign_key
             to: ref('product_dim')
-            to_columns: [Product_SK]
+            to_columns: Product_SK
         data_tests:
           - not_null
       - name: Sales

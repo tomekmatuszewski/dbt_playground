@@ -1,8 +1,8 @@
 {% macro create_pk(column_name) %}
     IF NOT EXISTS(
         SELECT *
-        FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
-        WHERE concat(TABLE_CATALOG, '.', TABLE_SCHEMA, '.', TABLE_NAME) = '{{ this }}'
+        FROM SYS.KEY_CONSTRAINTS
+        WHERE [TYPE] = 'PK' AND [PARENT_OBJECT_ID] = OBJECT_ID('{{ this.schema }}.{{ this.name }}')
     )
     BEGIN
         ALTER TABLE {{ this }}

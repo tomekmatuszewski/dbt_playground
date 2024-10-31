@@ -3,7 +3,7 @@
         materialized='incremental', 
         unique_key="Row_ID",
         on_schema_change='append_new_columns',
-        post_hook=[]
+        post_hook=["{{ create_pk('Row_ID') }}"]
       )
 }}
 
@@ -33,19 +33,6 @@ from {{ source('superstore_primary', 'superstore_primary') }}
 
 {% if is_incremental() %}
 WHERE Row_ID > (SELECT MAX(Row_ID) FROM {{ this }})
-
-{% else %}
-
-{{
-    config(
-        materialized='incremental', 
-        unique_key="Row_ID",
-        on_schema_change='append_new_columns',
-        post_hook = [
-           "{{ create_pk('Row_ID') }}"
-        ]
-      )
-}}
 
 {% endif %}
 
